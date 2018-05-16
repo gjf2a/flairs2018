@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.hendrix.modeselection.cluster.visualize.PointClustersController">
+   <center>
+      <Canvas fx:id="canvas" height="415.0" width="356.0" BorderPane.alignment="CENTER" />
+   </center>
+   <left>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <RadioButton fx:id="plot" mnemonicParsing="false" text="Plot" />
+            <RadioButton fx:id="classify" mnemonicParsing="false" text="Classify" />
+            <RadioButton fx:id="train" mnemonicParsing="false" text="Train" />
+         </children>
+      </VBox>
+   </left>
+   <top>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Number of nodes" />
+            <TextField fx:id="nodes" />
+            <Button mnemonicParsing="false" onAction="#generateBSOC" text="Regenerate" />
+            <Button mnemonicParsing="false" onAction="#clear" text="Clear" />
+         </children>
+      </HBox>
+   </top>
+</BorderPane>
