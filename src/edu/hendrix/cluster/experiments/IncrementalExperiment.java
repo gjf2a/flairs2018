@@ -2,13 +2,43 @@ package edu.hendrix.cluster.experiments;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 
 import edu.hendrix.cluster.Clusterable;
+import edu.hendrix.cluster.Clusterer;
+import edu.hendrix.util.Counter;
 
 public class IncrementalExperiment<C extends Clusterable<C>> {
+	private TreeMap<Integer,ArrayList<Clusterer<C,C>>> kToClusterers = new TreeMap<>();
+	
+	public IncrementalExperiment(PixelFunc<C> proc, int numClusters, File fin, @SuppressWarnings("unchecked") Function<Integer,Clusterer<C,C>>... makers) throws IOException {
+		for (int k = 2; k <= numClusters; k++) {
+			ArrayList<Clusterer<C,C>> clusterers = new ArrayList<>();
+			kToClusterers.put(k, clusterers);
+			for (Function<Integer,Clusterer<C,C>> f: makers) {
+				clusterers.add(f.apply(k));
+			}
+		}
+		
+		processAllPoints((img, x, y) -> {
+			for (int k = 2; k <= numClusters; k++) {
+				for (Clusterer<C,C> c: kToClusterers.get(k)) {
+					c.train(proc.procPixel(img, x, y));
+				}
+			}
+		}, fin);
+		
+		
+	}
+	
 	public static void processAllPoints(ImageFunc proc, File fin) throws IOException {
 		if (fin.isDirectory()) {
 			for (File file: fin.listFiles()) {

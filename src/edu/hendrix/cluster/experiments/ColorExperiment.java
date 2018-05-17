@@ -33,6 +33,7 @@ public class ColorExperiment extends Experiment<ColorCluster> {
 	
 	public void addAllImagesFrom(File fin) throws IOException {
 		System.out.println("Adding all images from " + fin);
-		IncrementalExperiment.processAllPoints((img, x, y) -> addExample(new ColorCluster(img.getRGB(x, y))), fin);
+		//IncrementalExperiment.processAllPoints((img, x, y) -> addExample(new ColorCluster(img.getRGB(x, y))), fin);
+		PointProducer.makeStreamFrom((img, x, y) -> new ColorCluster(img.getRGB(x, y)), fin).forEach(c -> addExample(c));
 	}
 }
