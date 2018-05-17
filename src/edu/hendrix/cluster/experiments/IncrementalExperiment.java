@@ -17,7 +17,8 @@ public class IncrementalExperiment<C extends Clusterable<C>> {
 	private File fin;
 	private PixelFunc<C> proc;
 	
-	public IncrementalExperiment(PixelFunc<C> proc, int numClusters, File fin, @SuppressWarnings("unchecked") Function<Integer,Clusterer<C,C>>... makers) throws IOException {
+	@SafeVarargs
+	public IncrementalExperiment(PixelFunc<C> proc, int numClusters, File fin, Function<Integer,Clusterer<C,C>>... makers) throws IOException {
 		this.fin = fin;
 		this.proc = proc;
 		

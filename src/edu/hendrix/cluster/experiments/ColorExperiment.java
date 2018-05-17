@@ -7,6 +7,7 @@ import java.util.function.Function;
 import edu.hendrix.cluster.BSOCSimpleEdge;
 import edu.hendrix.cluster.BoundedSelfOrgCluster;
 import edu.hendrix.cluster.Clusterer;
+import edu.hendrix.cluster.RandomIncrementalClusterer;
 import edu.hendrix.cluster.kmeans.KMeans;
 import edu.hendrix.cluster.kmeans.PlusPlusSeed;
 
@@ -19,6 +20,7 @@ public class ColorExperiment extends Experiment<ColorCluster> {
 		
 		ColorExperiment expr = new ColorExperiment(i -> new PlusPlusSeed<>(i, ColorCluster::distance, x -> x),
 				i -> new KMeans<>(i, ColorCluster::distance, x -> x),
+				i -> new RandomIncrementalClusterer<>(i, ColorCluster::distance, x -> x),
 				i -> new BoundedSelfOrgCluster<>(i, ColorCluster::distance, x -> x),
 				i -> new BSOCSimpleEdge<>(i, ColorCluster::distance, x -> x));
 		expr.addAllImagesFrom(new File(args[1]));
