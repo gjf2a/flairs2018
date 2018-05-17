@@ -23,6 +23,15 @@ public class PointProducer<C extends Clusterable<C>> {
 		return Stream.generate(() -> pp.next()).filter(c -> c.isPresent()).map(c -> c.get()).limit(pp.size());
 	}
 	
+	public static <C extends Clusterable<C>> Stream<C> makeSafeStreamFrom(PixelFunc<C> func, File fin) {
+		try {
+			return makeStreamFrom(func, fin);
+		} catch (IOException exc) {
+			System.out.println(exc.getMessage());
+			return Stream.empty();
+		}
+	}
+	
 	public static boolean isImageFile(File f) {
 		return Arrays.stream(ImageIO.getWriterFileSuffixes())
 				.anyMatch(s -> f.getName().endsWith(s));

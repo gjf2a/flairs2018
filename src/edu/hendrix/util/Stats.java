@@ -1,39 +1,45 @@
 package edu.hendrix.util;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.function.Supplier;
+import java.util.stream.DoubleStream;
+import java.util.stream.StreamSupport;
 
 public class Stats {
-	private ArrayList<Double> values = new ArrayList<>();
+	private Supplier<DoubleStream> valueSupplier;
+	
+	public Stats(Supplier<DoubleStream> valueSupplier) {
+		this.valueSupplier = valueSupplier;
+	}
 	
 	public Stats(double[] values) {
-		for (double v: values) {this.values.add(v);}
+		this(() -> Arrays.stream(values));
 	}
 	
 	public Stats(Iterable<Double> values) {
-		for (double v: values) {this.values.add(v);}
+		this(() -> StreamSupport.stream(values.spliterator(), true).mapToDouble(d -> d));
 	}
 	
 	public double size() {
-		return values.size();
+		return valueSupplier.get().count();
 	}
 	
 	public double min() {
-		return values.stream().reduce(Double.POSITIVE_INFINITY, (r, e) -> Math.min(r, e));
+		return valueSupplier.get().reduce(Double.POSITIVE_INFINITY, (r, e) -> Math.min(r, e));
 	}
 	
 	public double max() {
-		return values.stream().reduce(Double.NEGATIVE_INFINITY, (r, e) -> Math.max(r, e));
+		return valueSupplier.get().reduce(Double.NEGATIVE_INFINITY, (r, e) -> Math.max(r, e));
 	}
 	
 	public double mean() {
-		Util.assertState(values.size() >= 1, "No values");
-		return values.stream().reduce(0.0, (x, y) -> x + y) / values.size();
+		Util.assertState(size() >= 1, "No values");
+		return valueSupplier.get().reduce(0.0, (x, y) -> x + y) / size();
 	}
 	
 	public double variance() {
 		double mean = mean();
-		return values.stream().mapToDouble(v -> Math.pow(v - mean, 2)).sum() / (values.size() - 1);
+		return valueSupplier.get().map(v -> Math.pow(v - mean, 2)).sum() / (size() - 1);
 	}
 	
 	public double stdev() {
@@ -45,14 +51,13 @@ public class Stats {
 	}
 	
 	public double median() {
-		Util.assertState(values.size() >= 1, "No values");
-		ArrayList<Double> sorted = new ArrayList<>(values);
-		Collections.sort(sorted);
-		int middle = sorted.size() / 2;
-		if (sorted.size() % 2 == 1) {
-			return sorted.get(middle);
+		Util.assertState(size() >= 1, "No values");
+		double[] sorted = valueSupplier.get().sorted().toArray();
+		int middle = sorted.length / 2;
+		if (sorted.length % 2 == 1) {
+			return sorted[middle];
 		} else {
-			return (sorted.get(middle - 1) + sorted.get(middle)) / 2.0;
+			return (sorted[middle - 1] + sorted[middle]) / 2.0;
 		}
 	}
 }
