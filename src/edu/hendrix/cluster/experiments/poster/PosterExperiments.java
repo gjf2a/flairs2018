@@ -1,4 +1,4 @@
-package edu.hendrix.cluster.experiments;
+package edu.hendrix.cluster.experiments.poster;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +10,9 @@ import java.util.stream.Stream;
 import edu.hendrix.cluster.BoundedSelfOrgCluster;
 import edu.hendrix.cluster.Clusterer;
 import edu.hendrix.cluster.RandomIncrementalClusterer;
+import edu.hendrix.cluster.experiments.ColorCluster;
+import edu.hendrix.cluster.experiments.Experiment;
+import edu.hendrix.cluster.experiments.PointProducer;
 import edu.hendrix.cluster.kmeans.KMeans;
 import edu.hendrix.cluster.kmeans.PlusPlusSeed;
 
@@ -68,6 +71,9 @@ public class PosterExperiments {
 	}
 	
 	public static void procFiles(String outputFileName, ArrayList<File> files, ArrayList<Function<Integer,Clusterer<ColorCluster,ColorCluster>>> makers) throws IOException {
+		if (!outputFileName.endsWith(".csv")) {
+			outputFileName += ".csv";
+		}
 		File output = new File(outputFileName);
 		PrintStream fout = new PrintStream(output);
 		fout.println("k,algorithm,image,mean");
