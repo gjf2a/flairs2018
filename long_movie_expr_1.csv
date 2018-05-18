@@ -1,0 +1,13 @@
+k,algorithm,image,mean
+2,RandomIncrementalClusterer,inside,5745.120164332981
+2,BoundedSelfOrgCluster,inside,8383.862921935523
+4,RandomIncrementalClusterer,inside,2386.423071606196
+4,BoundedSelfOrgCluster,inside,3262.210398494569
+8,RandomIncrementalClusterer,inside,1159.8667620164888
+8,BoundedSelfOrgCluster,inside,871.4303095012759
+2,RandomIncrementalClusterer,outside,12382.948929456443
+2,BoundedSelfOrgCluster,outside,3044.9443186580756
+4,RandomIncrementalClusterer,outside,3336.2492697628377
+4,BoundedSelfOrgCluster,outside,2597.417682764809
+8,RandomIncrementalClusterer,outside,1035.7961858232431
+8,BoundedSelfOrgCluster,outside,1266.7119088789632
